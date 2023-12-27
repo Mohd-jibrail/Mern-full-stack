@@ -10,7 +10,7 @@ const productSchema  = mongoose.Schema({
         comments:{type:String, require:true},
         rating:{type:Number, require:true},
         user:{ type:mongoose.Schema.ObjectId, ref:"User"},
-        Image:[{
+        image:[{
             public_id:{type:String, default:"google.com"},
             url:{type:String, default:"google.com"}
         }],

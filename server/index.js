@@ -31,8 +31,8 @@ zahra_server.get("/api",(req,res)=>{
         message:"welcome"
     })
 });
-zahra_server.use("/api", authRoutes);
-zahra_server.use("/api",productRoutes);
+zahra_server.use("/api/auth", authRoutes);
+zahra_server.use("/api/prod",productRoutes);
 
 /*Middleware*/
 zahra_server.use(notFoundError);
