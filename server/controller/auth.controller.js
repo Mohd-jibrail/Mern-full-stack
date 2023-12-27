@@ -3,6 +3,7 @@ const asyncErrorHandler = require("../middleware/asyncErrorHandling");
 const generateToken = require("../config/generateToken");
 const cookies = require("cookie");
 
+/*The Sign-Up controller for User*/
 const signUpUser = asyncErrorHandler(async(req,res)=>{
     const {email} = req.body.email;
     const findUser = await User.findOne({email});
@@ -18,6 +19,8 @@ const signUpUser = asyncErrorHandler(async(req,res)=>{
         throw new Error("User already exist");
     }
 });
+
+/*The Log-In controller for User*/
 const logInUser = asyncErrorHandler(async(req,res)=>{
     const {email,password} = req.body;
     if(!email || !password){
@@ -34,6 +37,30 @@ const logInUser = asyncErrorHandler(async(req,res)=>{
             findUser
        });
     }
-})
+});
+/*The Log-Out controller for User*/
+const logOut= asyncErrorHandler(async(req,res)=>{
+    res.cookie("token",null,{
+        expires: new Date(Date.now()),
+        httpOnly: true,
+    });
+    res.status(200).json({
+        status:"Success",
+        message:"User log-out"
+    });
+});
 
-module.exports={signUpUser,logInUser};
+/*Get All Users*/
+const getAllUsers=asyncErrorHandler(async(req,res)=>{
+    const allUser = await User.find();
+       if(allUser){
+            res.status(200).json({
+                status:"success",
+                message:"Got all the users",
+                allUser
+            });
+       }else{
+        throw new Error("No user found");
+       }
+});
+module.exports={signUpUser,logInUser, getAllUsers, logOut};

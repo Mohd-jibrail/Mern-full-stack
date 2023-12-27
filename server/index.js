@@ -3,6 +3,7 @@ const dbConnection = require("./config/dbConnect");
 const notFoundError = require("./middleware/notFoundError");
 const syncErrorHandler = require("./middleware/syncErrorHandling");
 const authRoutes = require("./routes/auth.routes");
+const productRoutes = require("./routes/product.routes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const dotEnv = require("dotenv");
@@ -31,6 +32,7 @@ zahra_server.get("/api",(req,res)=>{
     })
 });
 zahra_server.use("/api", authRoutes);
+zahra_server.use("/api",productRoutes);
 
 /*Middleware*/
 zahra_server.use(notFoundError);

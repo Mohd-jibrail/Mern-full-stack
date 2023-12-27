@@ -11,8 +11,11 @@ const userSchema = mongoose.Schema({
             city:{ type:String, require:true},
             zipcode:{type:Number,minLength:6, maxLength:6, require:true},
             state:{type:String, maxLength:20 ,require:true}
-        }
-});
+        },
+    role:{
+        type:Array, default:"USER"
+    }
+},{createdAt:{ type:Date, default: Date.now}});
 userSchema.pre("save", async function(next){
     const salt = await bcrypt.genSaltSync(10);
     this.password= await bcrypt.hash(this.password,salt);
