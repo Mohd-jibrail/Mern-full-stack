@@ -1,6 +1,6 @@
-const asyncHandler = require("../middleware/asyncErrorHandling");
+const asyncHandler = require("../asyncErrorHandling");
 const jsonWebToken = require("jsonwebtoken");
-const User = require("../models/user.model");
+const User = require("../../models/user.model");
 const isAuthenticatedUser= asyncHandler(async(req,res,next)=>{
     const tokenObj= req.cookies;
     if(!tokenObj){

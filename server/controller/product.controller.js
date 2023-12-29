@@ -68,8 +68,7 @@ const deleteProduct = asyncErrorHandler(async(req,res)=>{
 });
 /* Implementation of Adding reviews to a product by a user*/
 const addReview = asyncErrorHandler(async(req,res)=>{
-    console.log(req.user._id);
-    const _id = req.params.id;
+    const _id = req.params.product_id;
     const review={
         comments:req.body.comments,
         rating:req.body.rating,
@@ -91,7 +90,7 @@ const addReview = asyncErrorHandler(async(req,res)=>{
 
 });
 const getAllReviews = asyncErrorHandler(async(req,res)=>{
-    const _id = req.params.id;
+    const _id = req.params.product_id;
     const reviews = await Product.findById({_id}).select({"reviews.comments":1,"reviews.rating":1});
     res.status(200).json({
         status:"Success",
@@ -100,9 +99,22 @@ const getAllReviews = asyncErrorHandler(async(req,res)=>{
     });
 
 });
-const getAReview = asyncErrorHandler(async(req,res)=>{
+const getAUserReview = asyncErrorHandler(async(req,res)=>{
     const _id = req.user._id;
     const review = await Product.find({"reviews.user":_id},'reviews.$');
+    if(!review){
+        throw new Error("No Reviews found");
+    }
+    res.status(200).json({
+        status:"Success",
+        message:"Got Review",
+        review
+    });
+});
+const getAReview = asyncErrorHandler(async(req,res)=>{
+    
+    const _id = req.params.review_id;
+    const review = await Product.find({"reviews._id":_id},'reviews.$');
     if(!review){
         throw new Error("No Reviews found");
     }
@@ -141,4 +153,4 @@ const updateReview = asyncErrorHandler(async(req,res)=>{
     });
 })
 module.exports={addProduct,getAllProducts,getAProduct,updateProduct,deleteProduct,
-                addReview,getAllReviews,getAReview,deleteReview,updateReview}
+                addReview,getAllReviews,getAUserReview,getAReview,deleteReview,updateReview}

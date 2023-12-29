@@ -15,6 +15,7 @@ process.on("uncaughtException", (err) => {
     console.log(`Uncaught Exception`);
     process.exit(1);
 });
+
 /*Database Config*/
 dotEnv.config();
 dbConnection();
@@ -24,13 +25,7 @@ zahra_server.use(cookieParser());
 zahra_server.use(bodyParser.json());
 zahra_server.use(bodyParser.urlencoded({extended:false}));
 
-/*Auth routes*/
-zahra_server.get("/api",(req,res)=>{
-    res.json({
-        status:true,
-        message:"welcome"
-    })
-});
+/*All the routes*/
 zahra_server.use("/api/auth", authRoutes);
 zahra_server.use("/api/prod",productRoutes);
 
@@ -46,7 +41,7 @@ zahra_server.listen(3000,()=>{
 process.on("unhandledRejection", (err) => {
     console.log(`Error: ${err.message}`);
     console.log(`Unhandled Promise Rejection`);
-  
+    
     zahra_server.close(() => {
       process.exit(1);
     });

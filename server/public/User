@@ -1,0 +1,12 @@
+User - login
+     - signUp
+     - logOut
+Admin- login
+     - signUp
+     - LogOut
+     - Get All User
+     - Get A User
+     - Block A User
+Cart - Add Product 
+     - Remove Product 
+     - Remove All Prodcut

@@ -12,10 +12,20 @@ const userSchema = mongoose.Schema({
             zipcode:{type:Number,minLength:6, maxLength:6, require:true},
             state:{type:String, maxLength:20 ,require:true}
         },
+    cart:[{
+            product:{type:mongoose.Schema.ObjectId, ref:"Product"},
+            tile:{ type:String, require:true},
+            price:{type:String, require:true},
+        }],
     role:{
         type:Array, default:"USER"
-    }
-},{createdAt:{ type:Date, default: Date.now}});
+    },
+    isActive:{type:Boolean, default:"true"}
+},{
+    createdAt:{ type:Date, default: Date.now}
+});
+
+
 userSchema.pre("save", async function(next){
     const salt = await bcrypt.genSaltSync(10);
     this.password= await bcrypt.hash(this.password,salt);

@@ -21,6 +21,7 @@ const productSchema  = mongoose.Schema({
         url:{type:String, default:"google.com"}
     }],
     tags:{ type:Array, require:true},
+    zipcode:{type:Number, require:true},
     createdAt:{ type:Date, default: Date.now}
 })
 const Product = mongoose.model("Product", productSchema);

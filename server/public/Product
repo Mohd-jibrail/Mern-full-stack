@@ -1,0 +1,11 @@
+Product - Add Product
+        - Update Product 
+        - Delete Product 
+        - Get A Product 
+        - Get All Product 
+Reviews - Add A Review
+        - Update A Review
+        - Delete A Review
+        - Get A Review(Id)
+        - Get A Review(User_Id)
+        
