@@ -1,6 +1,6 @@
 const User = require("../models/user.model");
 const Product = require("../models/product.model")
-const asyncErrorHandler = require("../middleware/asyncErrorHandling");
+const asyncErrorHandler = require("../middleware/errHandlers/asyncErrorHandling");
 const generateToken = require("../config/generateToken");
 const cookies = require("cookie");
 

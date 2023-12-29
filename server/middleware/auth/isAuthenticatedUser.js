@@ -1,4 +1,4 @@
-const asyncHandler = require("../asyncErrorHandling");
+const asyncHandler = require("../errHandlers/asyncErrorHandling");
 const jsonWebToken = require("jsonwebtoken");
 const User = require("../../models/user.model");
 const isAuthenticatedUser= asyncHandler(async(req,res,next)=>{

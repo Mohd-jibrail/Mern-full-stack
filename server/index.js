@@ -1,9 +1,10 @@
 const express = require("express");
 const dbConnection = require("./config/dbConnect");
-const notFoundError = require("./middleware/notFoundError");
-const syncErrorHandler = require("./middleware/syncErrorHandling");
+const notFoundError = require("./middleware/errHandlers/notFoundError");
+const syncErrorHandler = require("./middleware/errHandlers/syncErrorHandling");
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
+const orderRoutes = require("./routes/order.routes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const dotEnv = require("dotenv");
@@ -28,7 +29,7 @@ zahra_server.use(bodyParser.urlencoded({extended:false}));
 /*All the routes*/
 zahra_server.use("/api/auth", authRoutes);
 zahra_server.use("/api/prod",productRoutes);
-
+zahra_server.use("/api/order",orderRoutes)
 /*Middleware*/
 zahra_server.use(notFoundError);
 zahra_server.use(syncErrorHandler);

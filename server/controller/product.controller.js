@@ -1,5 +1,5 @@
 const Product = require("../models/product.model");
-const asyncErrorHandler = require("../middleware/asyncErrorHandling");
+const asyncErrorHandler = require("../middleware/errHandlers/asyncErrorHandling");
 const { json } = require("body-parser");
 
 /* Product adding*/
