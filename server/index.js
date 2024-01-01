@@ -8,6 +8,7 @@ const orderRoutes = require("./routes/order.routes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const dotEnv = require("dotenv");
+const cors = require("cors");
 const zahra_server = express();
 
 /*Handling Uncaught Exception*/
@@ -21,6 +22,9 @@ process.on("uncaughtException", (err) => {
 dotEnv.config();
 dbConnection();
 
+/*Allows cross site req*/
+zahra_server.use(cors());
+
 /*Setting up Json Obj pipeline*/
 zahra_server.use(cookieParser());
 zahra_server.use(bodyParser.json());
@@ -29,7 +33,8 @@ zahra_server.use(bodyParser.urlencoded({extended:false}));
 /*All the routes*/
 zahra_server.use("/api/auth", authRoutes);
 zahra_server.use("/api/prod",productRoutes);
-zahra_server.use("/api/order",orderRoutes)
+zahra_server.use("/api/order",orderRoutes);
+
 /*Middleware*/
 zahra_server.use(notFoundError);
 zahra_server.use(syncErrorHandler);

@@ -1,32 +1,50 @@
 const User = require("../models/user.model");
 const Product = require("../models/product.model")
 const asyncErrorHandler = require("../middleware/errHandlers/asyncErrorHandling");
+const isValidMongoDbId = require("../utilities/isMongoDbId");
 const generateToken = require("../config/generateToken");
+const zodValidation = require("zod");
 const cookies = require("cookie");
 
 /*The Sign-Up controller for User*/
 const signUpUser = asyncErrorHandler(async(req,res)=>{
+
     const {email} = req.body.email;
-    const findUser = await User.findOne({email});
+
+    const findUser = await User.find(email);
+
     if(!findUser){
-        const user = await User.create(req.body);
+        throw new Error("User already exist")
+    }
+    const user = await User.create(req.body);
         res.status(201)
            .json({
              status:"Success",
              message:"User signedUp successfully",
              user
         });
-    }else{
-        throw new Error("User already exist");
-    }
 });
 
 /*The Log-In controller for User*/
 const logInUser = asyncErrorHandler(async(req,res)=>{
+
     const {email,password} = req.body;
-    if(!email || !password){
-        throw new Error("Please enter the email and password");
-    }
+
+    const userLogIn = zodValidation.object({
+        email:zodValidation.string().email(),
+        password:zodValidation.string().min(10).max(20)
+    });
+
+    const isValidRequest = userLogIn.safeParse(req.body);
+
+    if(!isValidRequest.success){
+        res.status(400).json({
+            status:"Failed",
+            message:"Validation failed",
+            error:isValidRequest.error.errors
+        })
+    };
+
     const findUser = await User.findOne({email});
     if(findUser && (await findUser.isPasswordMatched(password))){
         const token = generateToken(findUser._id);
@@ -42,10 +60,12 @@ const logInUser = asyncErrorHandler(async(req,res)=>{
 
 /*The Log-Out controller for User*/
 const logOut= asyncErrorHandler(async(req,res)=>{
+
     res.cookie("token",null,{
         expires: new Date(Date.now()),
         httpOnly: true,
     });
+
     res.status(200).json({
         status:"Success",
         message:"User log-out"
@@ -54,6 +74,7 @@ const logOut= asyncErrorHandler(async(req,res)=>{
 
 /*Get All Users*/
 const getAllUsers=asyncErrorHandler(async(req,res)=>{
+
     const allUser = await User.find();
        if(allUser){
             res.status(200).json({
@@ -65,8 +86,10 @@ const getAllUsers=asyncErrorHandler(async(req,res)=>{
         throw new Error("No user found");
        }
 });
+
 const getAUser = asyncErrorHandler(async(req,res)=>{
     const _id = req.params.id;
+    isValidMongoDbId(_id);
     const findUser = await User.findById({_id},{password:0});
     if(!findUser){
         throw new Error("User does not exist");
@@ -77,6 +100,7 @@ const getAUser = asyncErrorHandler(async(req,res)=>{
         findUser
     })
 });
+
 const getAllActiveUsers = asyncErrorHandler(async(req,res)=>{
     const allActiveUsers = await User.find({isActive:true},{password:0});
     if(!allActiveUsers){
@@ -88,8 +112,10 @@ const getAllActiveUsers = asyncErrorHandler(async(req,res)=>{
         allActiveUsers
     })
 });
+
 const addToCart = asyncErrorHandler(async(req,res)=>{
     const product_id =req.params.id;
+    isValidMongoDbId(product_id);
     const findProduct = await Product.findById({_id:product_id});
     const cart={
         product:findProduct._id,
@@ -114,6 +140,7 @@ const addToCart = asyncErrorHandler(async(req,res)=>{
 });
 const removeFromCart = asyncErrorHandler(async(req,res)=>{
     const productId = req.params.id;
+    isValidMongoDbId(productId);
     const cartObj = req.user.cart;
     const isProductIdPresent = cartObj.some(cartItem=>cartItem.product==productId);
     if(!isProductIdPresent){
@@ -132,6 +159,7 @@ const removeFromCart = asyncErrorHandler(async(req,res)=>{
 });
 const emptyCart = asyncErrorHandler(async(req,res)=>{
    const userId = req.user._id;
+   isValidMongoDbId(userId);
    const cartObj = req.user.cart;
    if(cartObj.length==0){
      throw new Error("Cart is already empty");

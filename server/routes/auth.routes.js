@@ -3,10 +3,11 @@ const {signUpUser,logInUser, getAllUsers,logOut, getAUser, getAllActiveUsers, ad
        removeFromCart, emptyCart} = require("../controller/auth.controller");
 const isAuthenticatedUser = require("../middleware/auth/isAuthenticatedUser");
 const isAuthenticatedAdmin = require("../middleware/auth/isAuthenticatedAdmin");
+const {UserZodModelValidation} = require("../middleware/zods/user.zodValidation");
 const router = express.Router();
 
 /*All the User auth routes*/
-router.route("/signup").post(signUpUser);
+router.route("/signup").post(UserZodModelValidation,signUpUser);
 router.route("/login").post(logInUser);
 router.route("/logout").get(isAuthenticatedUser,logOut);
 router.route("/getAllUser").get(isAuthenticatedUser,isAuthenticatedAdmin,getAllUsers);

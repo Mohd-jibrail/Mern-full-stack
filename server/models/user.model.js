@@ -17,9 +17,7 @@ const userSchema = mongoose.Schema({
             tile:{ type:String, require:true},
             price:{type:String, require:true},
         }],
-    role:{
-        type:Array, default:"USER"
-    },
+    role:{ type:String, default:"user"},
     isActive:{type:Boolean, default:"true"}
 },{
     createdAt:{ type:Date, default: Date.now}

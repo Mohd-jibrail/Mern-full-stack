@@ -4,6 +4,7 @@ const { json } = require("body-parser");
 
 /* Product adding*/
 const addProduct =asyncErrorHandler(async(req,res)=>{
+    
     const product = await Product.create(req.body);
     res.status(200).json({
         status:"Success",
@@ -12,7 +13,7 @@ const addProduct =asyncErrorHandler(async(req,res)=>{
             title: product?.title,
             description:product?.description,
             price:product?.price,
-            stock:product?.stock
+            stock:product?.stock,
         }
     });
 });
@@ -31,6 +32,9 @@ const getAllProducts = asyncErrorHandler(async(req,res)=>{
 const getAProduct = asyncErrorHandler(async(req,res)=>{
     const _id = req.params.id;
     const product = await Product.findById({_id});
+    if(!product){
+        throw new Error("No product found")
+    }
     res.json({
         status:"Success",
         message:"Product added",

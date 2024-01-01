@@ -1,0 +1,19 @@
+/*This method is triggered when we save any this in the collection*/
+orderSchema.pre("save", async function(next){
+    try{
+        const oneDayDifference = Math.abs(this.orderDateAndTime - new Date())/(1000*60*60*24);
+        if(oneDayDifference>=1 && this.orderStatus==="Not-Started"){
+            this.orderStatus="Order-Shipped";
+            const delevery = new Delevery({
+                userId:this.userId,
+                productId:this.productId,
+                price:this.price,
+                address:this.address 
+            });
+            delevery.save();
+        }
+    }catch(err){
+      throw new Error(err);
+    }
+    next();
+})

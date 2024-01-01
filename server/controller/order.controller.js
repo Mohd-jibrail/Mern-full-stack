@@ -1,14 +1,13 @@
 const asyncErrorHandler = require("../middleware/errHandlers/asyncErrorHandling");
 const Order = require("../models/order.model");
 const addToOrder = asyncErrorHandler(async(req,res)=>{
-
-    const order={
+    const newOrder={
         userId:req.user._id,
         productId:req.product._id,
-        amount:req.product.price,
-        deleveryAddress:req.user.address
+        price:req.product.price,
+        address:req.user.address
     };
-    const createOrder = await Order.create(order);
+    const createOrder = await Order.create(newOrder);
     res.status(201).json({
         status:"Success",
         message:"Order Placed",

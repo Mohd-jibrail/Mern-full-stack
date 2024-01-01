@@ -22,7 +22,8 @@ const productSchema  = mongoose.Schema({
     }],
     tags:{ type:Array, require:true},
     zipcode:{type:Number, require:true},
-    createdAt:{ type:Date, default: Date.now}
-})
+    createdAt:{ type:Date, default: Date.now},
+    sellerId:{type:mongoose.Schema.ObjectId, ref:"User"}
+});
 const Product = mongoose.model("Product", productSchema);
 module.exports = Product;
