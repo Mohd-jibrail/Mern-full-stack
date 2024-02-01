@@ -30,22 +30,8 @@ const logInUser = asyncErrorHandler(async(req,res)=>{
 
     const {email,password} = req.body;
 
-    const userLogIn = zodValidation.object({
-        email:zodValidation.string().email(),
-        password:zodValidation.string().min(10).max(20)
-    });
-
-    const isValidRequest = userLogIn.safeParse(req.body);
-
-    if(!isValidRequest.success){
-        res.status(400).json({
-            status:"Failed",
-            message:"Validation failed",
-            error:isValidRequest.error.errors
-        })
-    };
-
     const findUser = await User.findOne({email});
+    
     if(findUser && (await findUser.isPasswordMatched(password))){
         const token = generateToken(findUser._id);
         res.status(200)

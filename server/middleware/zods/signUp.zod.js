@@ -6,10 +6,10 @@ const UserZodModel = zod.object({
     email:zod.string().email(),
     password:zod.string().min(10).max(20)
 });
-const UserZodModelValidation = (req,res,next)=>{
+const userSignUpValidation = (req,res,next)=>{
     const validationResult = UserZodModel.safeParse(req.body);
     if(validationResult.success){
-        req.validateUser =validationResult.data;
+        //req.validateUser =validationResult.data;
         next();
     }else{
         res.status(400).json({
@@ -19,4 +19,4 @@ const UserZodModelValidation = (req,res,next)=>{
         });
     };
 }
-module.exports={UserZodModelValidation}
+module.exports=userSignUpValidation;
